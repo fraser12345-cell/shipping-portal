@@ -1,0 +1,341 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Matrix Shipping Quote Request Portal</title>
+<style>
+:root{
+  --page:#eef3f8;
+  --panel:#fff;
+  --ink:#102033;
+  --muted:#66788a;
+  --line:#d9e3ee;
+  --line-strong:#c6d3df;
+  --brand:#132338;
+  --brand2:#1e3a5f;
+  --danger:#b42318;
+  --success:#067647;
+  --warning-bg:#fff8e6;
+  --warning-border:#f1c96b;
+  --warning-text:#6f4300;
+  --shadow:0 18px 45px rgba(15,35,55,.10);
+}
+*{box-sizing:border-box}
+html{background:var(--page)}
+body{margin:0;font-family:Arial,Helvetica,sans-serif;background:linear-gradient(180deg,#f6f9fc 0%,var(--page) 100%);color:var(--ink);min-height:100vh}
+body:before{content:"";display:block;height:8px;background:linear-gradient(90deg,var(--brand),var(--brand2))}
+.wrap{width:min(1320px,calc(100vw - 64px));margin:0 auto;padding:34px 0 48px;display:grid;grid-template-columns:minmax(0,1fr) 420px;gap:28px;align-items:start}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:20px;box-shadow:var(--shadow);overflow:hidden}
+.head{padding:28px 32px 18px;border-bottom:1px solid var(--line);background:linear-gradient(180deg,#fff 0%,#f9fbfd 100%)}
+.body{padding:28px 32px 32px}
+h1,h2,h3,p{margin:0}
+h1{font-size:30px;line-height:1.15;letter-spacing:-.02em;color:#07192d}
+h2{font-size:19px;line-height:1.25;color:#102033}
+h3{font-size:16px;line-height:1.3;color:#102033}
+.muted{color:var(--muted);font-size:14px;line-height:1.55;margin-top:8px}
+.warn{margin-top:18px;background:var(--warning-bg);border:1px solid var(--warning-border);color:var(--warning-text);border-radius:14px;padding:14px 16px;font-size:13px;line-height:1.55}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px 22px}
+.field{display:flex;flex-direction:column;gap:8px}
+.full{grid-column:1/-1}
+label{font-size:13px;font-weight:700;color:#132338}
+input,select,textarea,button{font:inherit}
+input,select,textarea{width:100%;border:1px solid var(--line-strong);border-radius:11px;padding:11px 13px;background:#fff;color:var(--ink);transition:border-color .15s ease,box-shadow .15s ease,background .15s ease}
+input,select{height:44px}
+textarea{min-height:104px;resize:vertical}
+input:focus,select:focus,textarea:focus{outline:none;border-color:#3b6ea8;box-shadow:0 0 0 3px rgba(59,110,168,.14)}
+.section{margin-top:30px;padding-top:26px;border-top:1px solid var(--line)}
+.section-head{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;margin-bottom:16px}
+.btn{border:0;border-radius:11px;padding:11px 16px;cursor:pointer;font-weight:700;transition:transform .12s ease,box-shadow .12s ease,background .12s ease}
+.btn:hover{transform:translateY(-1px)}
+.primary{background:var(--brand);color:#fff;box-shadow:0 8px 18px rgba(19,35,56,.22)}
+.primary:hover{background:#0c1726}
+.secondary{background:#f5f8fb;color:var(--brand);border:1px solid var(--line-strong)}
+.secondary:hover{background:#eef4fa}
+.danger{background:#fff5f3;color:var(--danger);border:1px solid #efb4ad}
+.box{border:1px solid var(--line);border-radius:16px;padding:20px;margin-bottom:16px;background:#fbfdff}
+.box-top{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:16px}
+.box-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:14px}
+.span2{grid-column:span 2}
+.checks{display:flex;align-items:center;gap:10px;padding:11px 13px;border:1px solid var(--line-strong);border-radius:11px;min-height:44px;background:#fff}
+.checks input{width:auto;height:auto}
+.metrics{display:grid;grid-template-columns:1fr;gap:12px}
+.metric{background:linear-gradient(180deg,#f8fbfe 0%,#eef4fa 100%);border:1px solid var(--line);border-radius:16px;padding:18px}
+.metric small{display:block;color:var(--muted);margin-bottom:8px;font-size:12px;text-transform:uppercase;letter-spacing:.05em}
+.metric strong{font-size:26px;color:var(--brand)}
+.preview{background:#f7fafc;border:1px solid var(--line);border-radius:16px;padding:16px;max-height:560px;overflow:auto;font-size:13px;line-height:1.45}
+.error-text{display:none;color:var(--danger);font-size:12px}
+.has-error input,.has-error select,.has-error textarea{border-color:var(--danger);background:#fff8f7}
+.has-error .error-text{display:block}
+.status{display:none;margin-top:18px;padding:13px 14px;border-radius:12px;font-size:14px}
+.err{background:#fff2f0;color:var(--danger);border:1px solid #f7c3be}
+.ok{background:#ecfdf3;color:var(--success);border:1px solid #abefc6}
+.actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:24px}
+aside{position:sticky;top:24px;display:flex;flex-direction:column;gap:22px}
+aside .card{box-shadow:0 12px 30px rgba(15,35,55,.08)}
+aside .head{padding:24px 28px 16px}
+aside .body{padding:22px 28px 28px}
+.email-preview-page{background:#fff;border:1px solid var(--line);padding:12px;overflow:auto}
+.email-box{border:1px solid #000;width:640px;min-height:26px;padding:5px 7px;margin:0 0 22px 0;font-family:Arial,Helvetica,sans-serif;font-size:9pt;color:#000;line-height:1.22}
+.email-box.tall-from{min-height:96px}
+.email-box.tall-to{min-height:160px}
+.email-box.medium{min-height:52px}
+.small{font-size:12px;color:var(--muted);margin-top:12px;line-height:1.45}
+@media(max-width:1180px){.wrap{width:min(980px,calc(100vw - 40px));grid-template-columns:1fr;padding-top:24px}aside{position:static}.metrics{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:760px){.wrap{width:calc(100vw - 24px)}.head{padding:22px 20px 16px}.body{padding:22px 20px 24px}.grid,.box-grid,.metrics{grid-template-columns:1fr}.full,.span2{grid-column:auto}.section-head,.box-top{align-items:flex-start;flex-direction:column}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<main class="card">
+<div class="head">
+<h1>Matrix Shipping Quote Request Portal</h1>
+<p class="muted">Select the mode of transport first. Air freight questions appear only when Air is selected.</p>
+<div class="warn"><b>Important:</b> the portal creates an Outlook draft file (.eml) so the table/box layout is preserved. Open the downloaded file in Outlook, review it, then send.</div>
+</div>
+<div class="body">
+<form id="f" novalidate>
+<div class="grid">
+<div class="field" data-field="moc"><label>Mode of transport *</label><select id="moc"><option value="">Select mode</option><option>Road</option><option>Air</option><option>Sea</option></select><div class="error-text">Required.</div></div>
+<div class="field" data-field="requestorName"><label>Requested by *</label><input id="requestorName"><div class="error-text">Required.</div></div>
+<div class="field" data-field="requestorEmail"><label>Requestor email *</label><input id="requestorEmail" type="email"><div class="error-text">Enter a valid email.</div></div>
+<div class="field" data-field="requestedDate"><label>Requested date *</label><input id="requestedDate" type="date"><div class="error-text">Required.</div></div>
+<div class="field" data-field="department"><label>Department *</label><input id="department"><div class="error-text">Required.</div></div>
+<div class="field" data-field="shipmentReference"><label>PO / Project / Travel / PB / OB *</label><input id="shipmentReference"><div class="error-text">Required.</div></div>
+<div class="field" data-field="itemDescription"><label>Item description *</label><input id="itemDescription"><div class="error-text">Required.</div></div>
+<div class="field" data-field="origin"><label>Origin *</label><input id="origin"><div class="error-text">Required.</div></div>
+<div class="field" data-field="materialSupplier"><label>Material supplier *</label><input id="materialSupplier"><div class="error-text">Required.</div></div>
+<div class="field full" data-field="fromAddress"><label>From - company name / address / exporter of record *</label><textarea id="fromAddress"></textarea><div class="error-text">Required.</div></div>
+<div class="field" data-field="destination"><label>Destination *</label><input id="destination"><div class="error-text">Required.</div></div>
+<div class="field full" data-field="toAddress"><label>To - company name / address / importer of record *</label><textarea id="toAddress"></textarea><div class="error-text">Required.</div></div>
+<div class="field" data-field="freightProvider"><label>Freight provider</label><input id="freightProvider"></div>
+<div class="field" data-field="productQuantity"><label>Product quantity *</label><input id="productQuantity" type="number" min="1"><div class="error-text">Required.</div></div>
+<div class="field" data-field="cartonQuantity"><label>Carton quantity *</label><input id="cartonQuantity" type="number" min="1"><div class="error-text">Required.</div></div>
+<div class="field full" data-field="weightsDimsSummary"><label>Weights and dims summary *</label><input id="weightsDimsSummary" placeholder="Example: 2 cartons, 20 x 20 x 20 cm, 10 kg each"><div class="error-text">Required.</div></div>
+<div class="field" data-field="incoterm"><label>Incoterm *</label><select id="incoterm"><option value="">Select incoterm</option><option>EXW</option><option>FOB</option><option>FCA</option><option>CIF</option><option>DAP</option><option>DDP</option></select><div class="error-text">Required.</div></div>
+<div class="field" data-field="hazardous"><label>HAZ status *</label><select id="hazardous"><option value="">HAZ / Non-Haz?</option><option>HAZ</option><option>Non-HAZ</option></select><div class="error-text">Required.</div></div>
+<div class="field" data-field="msdsAvailable"><label>MSDS available? *</label><select id="msdsAvailable"><option value="">Available Yes / No</option><option>Yes</option><option>No</option></select><div class="error-text">Required. HAZ must have MSDS available.</div></div>
+<div class="field" data-field="grd"><label>GRD</label><input id="grd"></div>
+<div class="field" data-field="readyDate"><label>Required / ready date *</label><input id="readyDate" type="date"><div class="error-text">Required.</div></div>
+<div class="field"><label>Special handling</label><div class="checks"><input id="specialHandling" type="checkbox"><span>Special handling required</span></div></div>
+</div>
+
+<div id="airOnly" class="section" style="display:none">
+<div class="box">
+<div class="box-top"><div><h3>Air freight details</h3><p class="muted">These fields only appear and validate when Air is selected.</p></div></div>
+<div class="grid">
+<div class="field full" data-field="reasonForAirFreight"><label>Reason for air freight *</label><textarea id="reasonForAirFreight"></textarea><div class="error-text">Required for Air.</div></div>
+<div class="field" data-field="airApprovedBy"><label>Approved by *</label><select id="airApprovedBy"><option value="">Select approver</option><option>JP Manifrinato</option><option>Fraser Proctor</option><option>Kelly Bailey</option><option>Jordan Schlipf</option><option>Jon Yates</option><option>Harry Zalk</option></select><div class="error-text">Required for Air.</div></div>
+<div class="field" data-field="etaStandardShipment"><label>ETA standard shipment *</label><input id="etaStandardShipment" type="date"><div class="error-text">Required for Air.</div></div>
+<div class="field" data-field="etaExpeditedShipment"><label>ETA expedited shipment *</label><input id="etaExpeditedShipment" type="date"><div class="error-text">Required for Air.</div></div>
+<div class="field" data-field="estimatedStdFreightCost"><label>Estimated standard freight cost *</label><input id="estimatedStdFreightCost" type="number" min="0" step="any"><div class="error-text">Required for Air.</div></div>
+<div class="field" data-field="estimatedFreightCost"><label>Estimated freight cost *</label><input id="estimatedFreightCost" type="number" min="0" step="any"><div class="error-text">Required for Air.</div></div>
+<div class="field" data-field="timeDifference"><label>Time difference *</label><input id="timeDifference"><div class="error-text">Required for Air.</div></div>
+<div class="field" data-field="costDifference"><label>Cost difference *</label><input id="costDifference"><div class="error-text">Required for Air.</div></div>
+</div></div></div>
+
+<div class="section">
+<div class="section-head"><div><h2>Box / SKU details</h2><p class="muted">Each box line must be completed. Use Add box for multiple carton/SKU lines.</p></div><button type="button" class="btn secondary" id="addBox">+ Add box</button></div>
+<div id="boxes"></div>
+</div>
+
+<div class="section"><div class="field full"><label>Additional notes</label><textarea id="notes"></textarea></div></div>
+<div class="actions"><button class="btn primary" type="submit">Generate Outlook draft file</button><button class="btn secondary" type="button" id="downloadDraft">Download Outlook draft file</button></div>
+<div id="err" class="status err">Submission blocked until all required fields are complete.</div>
+<div id="ok" class="status ok">Outlook draft file generated. Open the downloaded .eml file in Outlook, review it, then send.</div>
+</form>
+</div>
+</main>
+
+<aside>
+<div class="card"><div class="head"><h2>Live summary</h2><p class="muted">Auto-calculated from the box detail lines.</p></div><div class="body"><div class="metrics"><div class="metric"><small>Total boxes</small><strong id="totalBoxes">0</strong></div><div class="metric"><small>Total weight</small><strong id="totalWeight">0 kg</strong></div><div class="metric"><small>Total volume</small><strong id="totalVolume">0 cbm</strong></div></div></div></div>
+<div class="card"><div class="head"><h2>Email preview</h2><p class="muted">This is the exact boxed layout that will go into the Outlook draft file.</p></div><div class="body"><p><b>To:</b> JP.Manfrinato@thisismatrix.com, Fraser.Proctor@thisismatrix.com</p><p style="margin-top:10px"><b>Subject:</b> <span id="subj"></span></p><div class="preview email-preview-page" id="prev" style="margin-top:14px"></div><p class="small">Air approval details appear in the draft only when Mode of Transport is Air.</p></div></div>
+</aside>
+</div>
+
+<script>
+const TEAM='JP.Manfrinato@thisismatrix.com,Fraser.Proctor@thisismatrix.com';
+const f=document.getElementById('f'), boxes=document.getElementById('boxes'), moc=document.getElementById('moc'), air=document.getElementById('airOnly'), err=document.getElementById('err'), ok=document.getElementById('ok');
+let boxNo=0;
+
+function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/\n/g,'<br>')}
+function v(id){let e=document.getElementById(id);return e?String(e.value||'').trim():''}
+function fmt(n){return new Intl.NumberFormat('en-GB',{maximumFractionDigits:2}).format(n)}
+function toKg(v,u){return u==='lb'?v*0.453592:v}
+function toCm(v,u){return u==='in'?v*2.54:v}
+function showAir(){air.style.display=moc.value==='Air'?'block':'none'}
+function clearAir(){if(moc.value==='Air')return;['reasonForAirFreight','airApprovedBy','etaStandardShipment','etaExpeditedShipment','estimatedStdFreightCost','estimatedFreightCost','timeDifference','costDifference'].forEach(id=>{document.getElementById(id).value=''})}
+
+function addBox(){
+ boxNo++;
+ let d=document.createElement('div');d.className='box boxline';
+ d.innerHTML='<div class="box-top"><div><h3>Box '+boxNo+'</h3><p class="muted">All fields below are mandatory.</p></div><button type="button" class="btn danger rem">Remove</button></div><div class="box-grid"><div class="field" data-box="sku"><label>SKU / item code *</label><input class="sku"><div class="error-text">Required.</div></div><div class="field" data-box="qty"><label>Quantity *</label><input class="qty" type="number" min="1" value="1"><div class="error-text">Required.</div></div><div class="field" data-box="length"><label>Length *</label><input class="length" type="number" min="0" step="any"><div class="error-text">Required.</div></div><div class="field" data-box="width"><label>Width *</label><input class="width" type="number" min="0" step="any"><div class="error-text">Required.</div></div><div class="field" data-box="height"><label>Height *</label><input class="height" type="number" min="0" step="any"><div class="error-text">Required.</div></div><div class="field"><label>Dim unit *</label><select class="dim"><option value="cm">cm</option><option value="in">in</option></select></div><div class="field" data-box="weight"><label>Gross weight *</label><input class="weight" type="number" min="0" step="any"><div class="error-text">Required.</div></div><div class="field"><label>Weight unit *</label><select class="wunit"><option value="kg">kg</option><option value="lb">lb</option></select></div><div class="field span2" data-box="contents"><label>Contents / notes *</label><input class="contents"><div class="error-text">Required.</div></div></div>';
+ boxes.appendChild(d); updateAll();
+}
+
+function renumber(){document.querySelectorAll('.boxline h3').forEach((h,i)=>h.textContent='Box '+(i+1))}
+function getBoxes(){return Array.from(document.querySelectorAll('.boxline')).map((b,i)=>({el:b,i:i+1,sku:b.querySelector('.sku').value.trim(),qty:b.querySelector('.qty').value.trim(),length:b.querySelector('.length').value.trim(),width:b.querySelector('.width').value.trim(),height:b.querySelector('.height').value.trim(),dim:b.querySelector('.dim').value,weight:b.querySelector('.weight').value.trim(),wunit:b.querySelector('.wunit').value,contents:b.querySelector('.contents').value.trim()}))}
+function totals(){let tb=0,tw=0,tv=0;getBoxes().forEach(b=>{let q=Number(b.qty||0),l=toCm(Number(b.length||0),b.dim),w=toCm(Number(b.width||0),b.dim),h=toCm(Number(b.height||0),b.dim);tb+=q;tw+=toKg(Number(b.weight||0)*q,b.wunit);if(q&&l&&w&&h)tv+=(l*w*h*q)/1000000});return{tb,tw,tv}}
+function head(){return{moc:v('moc'),requestorName:v('requestorName'),requestorEmail:v('requestorEmail'),requestedDate:v('requestedDate'),department:v('department'),shipmentReference:v('shipmentReference'),itemDescription:v('itemDescription'),origin:v('origin'),materialSupplier:v('materialSupplier'),fromAddress:v('fromAddress'),destination:v('destination'),freightProvider:v('freightProvider'),toAddress:v('toAddress'),productQuantity:v('productQuantity'),cartonQuantity:v('cartonQuantity'),weightsDimsSummary:v('weightsDimsSummary'),incoterm:v('incoterm'),hazardous:v('hazardous'),msdsAvailable:v('msdsAvailable'),grd:v('grd'),readyDate:v('readyDate'),specialHandling:document.getElementById('specialHandling').checked,notes:v('notes'),reasonForAirFreight:v('reasonForAirFreight'),airApprovedBy:v('airApprovedBy'),etaStandardShipment:v('etaStandardShipment'),etaExpeditedShipment:v('etaExpeditedShipment'),estimatedStdFreightCost:v('estimatedStdFreightCost'),estimatedFreightCost:v('estimatedFreightCost'),timeDifference:v('timeDifference'),costDifference:v('costDifference')}}
+
+function safeText(value){
+ return esc(value);
+}
+
+function tableSection(rows){
+ const width = 780;
+ const labelWidth = 230;
+ const valueWidth = width - labelWidth;
+ let tr = '';
+
+ rows.forEach(function(row){
+  const label = safeText(row[0]);
+  const value = row[2] === true ? String(row[1] || '') : safeText(row[1]);
+
+  tr += '<tr>'
+      + '<td width="'+labelWidth+'" bgcolor="#f2f2f2" style="width:'+labelWidth+'px;background-color:#f2f2f2;border:1px solid #000000;mso-border-alt:solid #000000 .75pt;padding:8px 9px;font-family:Arial,Helvetica,sans-serif;font-size:11pt;line-height:14pt;font-weight:bold;color:#000000;vertical-align:top;">'+label+'</td>'
+      + '<td width="'+valueWidth+'" bgcolor="#ffffff" style="width:'+valueWidth+'px;background-color:#ffffff;border:1px solid #000000;mso-border-alt:solid #000000 .75pt;padding:8px 9px;font-family:Arial,Helvetica,sans-serif;font-size:11pt;line-height:14pt;color:#000000;vertical-align:top;">'+value+'</td>'
+      + '</tr>';
+ });
+
+ return '<table role="presentation" cellpadding="0" cellspacing="0" border="0" width="'+width+'" style="width:'+width+'px;border-collapse:collapse;mso-table-lspace:0pt;mso-table-rspace:0pt;table-layout:fixed;">'
+      + tr
+      + '</table>';
+}
+
+function spacer(){
+ return '<table role="presentation" cellpadding="0" cellspacing="0" border="0" width="780" style="width:780px;border-collapse:collapse;mso-table-lspace:0pt;mso-table-rspace:0pt;"><tr><td height="22" style="height:22px;line-height:22px;font-size:1px;">&nbsp;</td></tr></table>';
+}
+
+function singleRowSection(label, value){
+ return tableSection([[label, value]]);
+}
+
+function boxDetailsHtml(){
+ let html = '';
+ getBoxes().forEach(function(b){
+  html += '- Box '+safeText(b.i)+'<br>';
+  html += 'SKU / Item Code: '+safeText(b.sku)+'<br>';
+  html += 'Quantity: '+safeText(b.qty)+'<br>';
+  html += 'Dimensions: '+safeText(b.length)+' x '+safeText(b.width)+' x '+safeText(b.height)+' '+safeText(b.dim)+'<br>';
+  html += 'Gross Weight: '+safeText(b.weight)+' '+safeText(b.wunit)+'<br><br>';
+ });
+ return html;
+}
+
+function emailHtml(){
+ let h=head(),t=totals();
+ let parts=[];
+
+ function add(section){
+  parts.push(section);
+  parts.push(spacer());
+ }
+
+ add(tableSection([
+  ['Requestor', h.requestorName],
+  ['Email', h.requestorEmail],
+  ['Requested Date', h.requestedDate],
+  ['Department', h.department],
+  ['Shipment Reference', h.shipmentReference]
+ ]));
+
+ add(singleRowSection('Mode of Transport', h.moc));
+ add(singleRowSection('Item Description', h.itemDescription));
+
+ add(tableSection([
+  ['Origin', h.origin],
+  ['Material Supplier', h.materialSupplier],
+  ['From', h.fromAddress]
+ ]));
+
+ add(singleRowSection('To', h.toAddress));
+ add(singleRowSection('Incoterm', h.incoterm));
+
+ add(tableSection([
+  ['HAZ Status', h.hazardous],
+  ['MSDS Available', h.msdsAvailable],
+  ['GRD', h.grd || 'Not specified']
+ ]));
+
+ add(tableSection([
+  ['Product Quantity', h.productQuantity],
+  ['Carton Quantity', h.cartonQuantity]
+ ]));
+
+ add(tableSection([
+  ['Box / SKU Details', boxDetailsHtml(), true]
+ ]));
+
+ add(tableSection([
+  ['Total Boxes', t.tb],
+  ['Total Weight (kg)', fmt(t.tw)],
+  ['Total Volume (cbm)', fmt(t.tv)]
+ ]));
+
+ if(h.moc === 'Air'){
+  add(tableSection([
+   ['Approved By', h.airApprovedBy],
+   ['Reason for Air Freight', h.reasonForAirFreight],
+   ['ETA Standard Shipment', h.etaStandardShipment],
+   ['ETA Expedited Shipment', h.etaExpeditedShipment],
+   ['Estimated Standard Freight Cost', h.estimatedStdFreightCost],
+   ['Estimated Freight Cost', h.estimatedFreightCost],
+   ['Time Difference', h.timeDifference],
+   ['Cost Difference', h.costDifference]
+  ]));
+ }
+
+ if(h.notes){
+  add(singleRowSection('Additional Notes', h.notes));
+ }
+
+ return '<!doctype html>'
+      + '<html><head><meta charset="utf-8">'
+      + '<meta name="x-apple-disable-message-reformatting">'
+      + '<style>table{border-collapse:collapse;} body{margin:0;padding:0;background:#ffffff;}</style>'
+      + '</head>'
+      + '<body bgcolor="#ffffff" style="margin:0;padding:18px 0;background-color:#ffffff;">'
+      + '<center>'
+      + '<table role="presentation" cellpadding="0" cellspacing="0" border="0" width="780" style="width:780px;border-collapse:collapse;mso-table-lspace:0pt;mso-table-rspace:0pt;">'
+      + '<tr><td width="780" style="width:780px;padding:0;margin:0;">'
+      + parts.join('')
+      + '</td></tr></table>'
+      + '</center>'
+      + '</body></html>';
+}
+
+function email(){
+ let h=head();
+ return {subject:'Quote Request - '+(h.shipmentReference||'New Shipment')+' - '+(h.origin||'Origin')+' to '+(h.destination||'Destination'), html:emailHtml()};
+}
+
+function preview(){let t=totals(),e=email();document.getElementById('totalBoxes').textContent=t.tb;document.getElementById('totalWeight').textContent=fmt(t.tw)+' kg';document.getElementById('totalVolume').textContent=fmt(t.tv)+' cbm';document.getElementById('subj').textContent=e.subject;document.getElementById('prev').innerHTML=e.html}
+function clearErrs(){document.querySelectorAll('.has-error').forEach(e=>e.classList.remove('has-error'))}
+function mark(id){let e=document.querySelector('[data-field="'+id+'"]');if(e)e.classList.add('has-error')}
+function valid(){clearErrs();let h=head(),valid=true;['moc','requestorName','requestorEmail','requestedDate','department','shipmentReference','itemDescription','origin','materialSupplier','fromAddress','destination','toAddress','productQuantity','cartonQuantity','weightsDimsSummary','incoterm','hazardous','msdsAvailable','readyDate'].forEach(id=>{if(!h[id]){mark(id);valid=false}});if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(h.requestorEmail)){mark('requestorEmail');valid=false}if(Number(h.productQuantity)<=0){mark('productQuantity');valid=false}if(Number(h.cartonQuantity)<=0){mark('cartonQuantity');valid=false}if(h.hazardous==='HAZ'&&h.msdsAvailable!=='Yes'){mark('msdsAvailable');valid=false}if(h.moc==='Air')['reasonForAirFreight','airApprovedBy','etaStandardShipment','etaExpeditedShipment','estimatedStdFreightCost','estimatedFreightCost','timeDifference','costDifference'].forEach(id=>{if(!h[id]){mark(id);valid=false}});getBoxes().forEach(b=>{[['sku',b.sku],['qty',b.qty],['length',b.length],['width',b.width],['height',b.height],['weight',b.weight],['contents',b.contents]].forEach(p=>{let numeric=['qty','length','width','height','weight'].includes(p[0]),bad=!p[1]||(numeric&&Number(p[1])<=0);if(bad){b.el.querySelector('[data-box="'+p[0]+'"]').classList.add('has-error');valid=false}})});return valid}
+function updateAll(){showAir();clearAir();renumber();preview();err.style.display='none';ok.style.display='none'}
+function makeEml(){
+ let e=email();
+ let eml='X-Unsent: 1\r\nTo: '+TEAM+'\r\nSubject: '+e.subject+'\r\nMIME-Version: 1.0\r\nContent-Type: text/html; charset=UTF-8\r\n\r\n'+e.html;
+ let blob=new Blob([eml],{type:'message/rfc822'});
+ let a=document.createElement('a');
+ a.href=URL.createObjectURL(blob);
+ a.download='matrix-shipping-quote-request.eml';
+ document.body.appendChild(a);
+ a.click();
+ setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},1000);
+}
+document.getElementById('addBox').addEventListener('click',addBox);
+moc.addEventListener('change',updateAll);
+boxes.addEventListener('click',e=>{if(e.target.classList.contains('rem')&&document.querySelectorAll('.boxline').length>1){e.target.closest('.boxline').remove();updateAll()}});
+f.addEventListener('input',preview);
+f.addEventListener('change',()=>{showAir();preview()});
+document.getElementById('downloadDraft').addEventListener('click',()=>{if(valid()){ok.style.display='block';err.style.display='none';makeEml()}else{err.style.display='block';ok.style.display='none'}});
+f.addEventListener('submit',e=>{e.preventDefault();if(valid()){ok.style.display='block';err.style.display='none';makeEml()}else{err.style.display='block';ok.style.display='none'}});
+document.getElementById('requestedDate').value=new Date().toISOString().slice(0,10);
+addBox();
+updateAll();
+</script>
+</body>
+</html>
